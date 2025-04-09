@@ -14,17 +14,38 @@ datasource db {
 }
 
 model Users {
-  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
-  fullname                String
-  email                   String    @unique
-  current_password        String
-  role                    Role      @default(EDITOR)
-  status                  Status    @default(PENDING)
-  verificationCode        String?
-  verificationCodeExpires DateTime?
-  createdat               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  id                           String    @id @default(auto()) @map("_id") @db.ObjectId //De esta forma se crea un id en mongo
+  fullname                     String
+  email                        String    @unique
+  current_password             String
+  rol                          Role      @default(EDITOR)
+  status                       Status    @default(PENDING)
+  phone                        String    @unique
+  verificationCodePhone        String?
+  verificationCodePhoneExpires DateTime?
+  verificationCode             String?
+  verificationCodeExpires      DateTime?
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @updatedAt
 }
+
+model Department {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  cities    City[]   @relation("DepartmentCities") 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name         String     @unique
+  department   Department @relation("DepartmentCities", fields: [departmentId], references: [id])
+  departmentId String     @db.ObjectId
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
 
 enum Role {
   SUPERADMIN
@@ -36,3 +57,5 @@ enum Status {
   INACTIVE
   PENDING
 }
+
+// PARA MIGRAR A LA BASE ES PRIMERO FORMAT Y LUEGO GENERATE

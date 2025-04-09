@@ -1,13 +1,12 @@
-
 services:
   app:
     build:
       context: .
       args:
-        BUILDPLATFORM: linux/amd64
-    platform: linux/amd64
+        BUILDPLATFORM: linux/arm65
+    platform: linux/arm64
     ports:
-      - "8007:8007"
+      - "3000:3000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
     volumes:
